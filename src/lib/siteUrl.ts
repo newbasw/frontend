@@ -36,8 +36,30 @@ export function siteUrl(): string {
   return resolved ? withScheme(resolved).replace(/\/+$/, '') : 'http://localhost:3000';
 }
 
-/** Origin of the API this frontend talks to. */
-export function apiUrl(): string {
+/**
+ * Absolute origin of the API.
+ *
+ * Used for server-side rendering, which cannot fetch a relative path, and as
+ * the destination of the rewrite in next.config.mjs.
+ */
+export function apiOrigin(): string {
   const resolved = firstSet(process.env.NEXT_PUBLIC_API_URL);
   return resolved ? withScheme(resolved).replace(/\/+$/, '') : 'http://localhost:4000';
+}
+
+/**
+ * What the *browser* should call.
+ *
+ * Empty, meaning same-origin: requests go to this site and are rewritten to
+ * the API by next.config.mjs. That is what keeps the session cookie
+ * first-party — calling the API host directly makes it third-party, and a
+ * browser that refuses those lets a login succeed and then drops the session
+ * on the very next request.
+ *
+ * On the server there is no origin to be relative to, so the absolute one is
+ * used instead.
+ */
+export function apiUrl(): string {
+  if (typeof window !== 'undefined') return '';
+  return apiOrigin();
 }

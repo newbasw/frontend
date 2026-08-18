@@ -18,8 +18,16 @@ export function LoginForm() {
 
   // Only same-origin relative paths — never redirect to an attacker-supplied
   // absolute URL taken from the query string.
-  const requested = searchParams.get('next') ?? '/account';
-  const next = requested.startsWith('/') && !requested.startsWith('//') ? requested : '/account';
+  /*
+   * Return people to whatever sent them here — the vehicle they were about to
+   * buy, or the conversation they were starting. With nothing to return to,
+   * the homepage is the useful place to be, not the account page.
+   *
+   * Only same-site paths are honoured, so a crafted `next` cannot bounce
+   * someone to another site after signing in.
+   */
+  const requested = searchParams.get('next') ?? '/';
+  const next = requested.startsWith('/') && !requested.startsWith('//') ? requested : '/';
 
   async function onSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();

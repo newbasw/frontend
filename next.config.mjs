@@ -41,6 +41,25 @@ const nextConfig = {
       },
     ];
   },
+  /*
+   * Proxy API calls through this origin.
+   *
+   * The API lives on another host, which makes its session cookie third-party
+   * — and browsers increasingly refuse to store or send those. The symptom is
+   * a login that succeeds and then evaporates: the header shows the account
+   * for a moment, the next request arrives with no cookie, and the reader is
+   * signed out again.
+   *
+   * Serving the API from this origin makes the cookie first-party, so it is
+   * kept and sent like any other. This is the plain rewrites array, which runs
+   * *after* the filesystem routes, so this app's own /api/cron/sync still
+   * resolves locally and only unmatched paths fall through to the backend.
+   */
+  async rewrites() {
+    const origin = (process.env.NEXT_PUBLIC_API_URL || '').trim().replace(/\/+$/, '');
+    if (!origin) return [];
+    return [{ source: '/api/:path*', destination: `${origin}/api/:path*` }];
+  },
   async redirects() {
     return [
       // The reference site links the footer "How to buy" item at /how-to-buy

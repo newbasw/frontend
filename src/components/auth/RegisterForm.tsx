@@ -46,7 +46,15 @@ export function RegisterForm() {
 
       setUser(result.user);
       // Full navigation for the same reason as login — see LoginForm.
-      window.location.assign('/account');
+      /*
+       * Land on the homepage, not the account page.
+       *
+       * Someone who has just registered wants to look at vehicles; the header
+       * shows their account either way. A full navigation is used so the
+       * layout re-reads the new session and the header switches from Login to
+       * Account immediately.
+       */
+      window.location.assign('/');
     } catch (err) {
       if (err instanceof ApiRequestError) {
         setFieldErrors(err.details ?? {});
