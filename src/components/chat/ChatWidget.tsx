@@ -6,14 +6,17 @@ import { useAuth } from '../auth/AuthProvider';
 import { BasWorldMark } from '../ui/BasWorldMark';
 import { Close, Spinner } from '../icons';
 import { ChatLauncher } from './ChatLauncher';
+import { AccountRequired } from '../auth/AccountRequired';
 
 /**
  * Buyer chat.
  *
  * Replaces the email-only enquiry flow: a buyer writes, the admin sees it in
- * the dashboard and replies, and the reply appears here. Guests can use it
- * without registering — the server issues them a token cookie so the thread
- * survives a reload.
+ * the dashboard and replies, and the reply appears here.
+ *
+ * Sending a message needs an account. Browsing the catalogue never does — the
+ * account is asked for only where we take on a promise to reply to a real
+ * person, so the thread has an owner we can actually get back to.
  *
  * Polls while open. A socket would be tidier, but polling every few seconds is
  * honest about what this is and needs no extra infrastructure.
@@ -40,8 +43,6 @@ export function ChatWidget({ vehicleId = null, vehicleTitle, vehicleReference, i
   const [conversationId, setConversationId] = useState<string | null>(null);
   const [messages, setMessages] = useState<Message[]>([]);
   const [draft, setDraft] = useState('');
-  const [name, setName] = useState('');
-  const [email, setEmail] = useState('');
   const [starting, setStarting] = useState(false);
   const [sending, setSending] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -83,8 +84,8 @@ export function ChatWidget({ vehicleId = null, vehicleTitle, vehicleReference, i
           method: 'POST',
           body: JSON.stringify({
             vehicleId,
-            name: name || user?.first_name || undefined,
-            email: email || user?.email || undefined,
+            name: user?.first_name ?? undefined,
+            email: user?.email ?? undefined,
             subject: vehicleTitle ?? undefined,
           }),
         },
@@ -129,7 +130,11 @@ export function ChatWidget({ vehicleId = null, vehicleTitle, vehicleReference, i
     }
   }
 
-  const needsDetails = !user && !conversationId;
+  /*
+   * Messaging needs an account. Browsing never does — this only gates the
+   * point where we take on a promise to reply to a real person.
+   */
+  const needsAccount = !user;
 
   const panel = (
     <div
@@ -161,7 +166,7 @@ export function ChatWidget({ vehicleId = null, vehicleTitle, vehicleReference, i
       <div ref={scrollRef} className="flex-1 space-y-3 overflow-y-auto p-4">
         {!conversationId && (
           <p className="text-base text-grey-800">
-            Send us a message and a BAS World advisor will reply here. No email needed.
+            Send us a message and a BAS World advisor will reply here.
           </p>
         )}
         {messages.map((m) => (
@@ -183,33 +188,8 @@ export function ChatWidget({ vehicleId = null, vehicleTitle, vehicleReference, i
       </div>
 
       <div className="shrink-0 border-t border-grey-300 p-3">
-        {needsDetails ? (
-          <div className="space-y-2">
-            <input
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-              placeholder="Your name"
-              className="bw-input"
-              aria-label="Your name"
-            />
-            <input
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              placeholder="Email (optional)"
-              type="email"
-              className="bw-input"
-              aria-label="Email"
-            />
-            <button
-              type="button"
-              onClick={start}
-              disabled={starting}
-              data-testid="chat-start"
-              className="bw-btn-black w-full"
-            >
-              {starting ? <Spinner size={16} /> : 'Start chat'}
-            </button>
-          </div>
+        {needsAccount ? (
+          <AccountRequired action="message us" reason="So we can reply to you and keep your conversation in one place, please create an account first." />
         ) : !conversationId ? (
           <button
             type="button"

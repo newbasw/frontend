@@ -7,6 +7,7 @@ import { useAuth } from '../auth/AuthProvider';
 import { formatPrice } from '@/lib/format';
 import { Spinner } from '../icons';
 import { PaymentStatus, type PaymentRequest } from './PaymentStatus';
+import { AccountRequired } from '../auth/AccountRequired';
 
 /**
  * Buy-now panel.
@@ -106,7 +107,12 @@ export function PaymentPanel({
       </header>
 
       <div className="p-4">
-        {!open ? (
+        {!user ? (
+          <AccountRequired
+            action="buy this vehicle"
+            reason="Paying means we hold a record for you — your reference, the account details we send, and the status of the transfer. That needs an account."
+          />
+        ) : !open ? (
           <>
             <p className="text-base text-grey-800">
               Pay by bank transfer, Zelle, Chime, Wise, Revolut or crypto. Tell us how you would

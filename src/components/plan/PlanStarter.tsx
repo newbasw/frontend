@@ -6,6 +6,7 @@ import { ApiRequestError, clientApi } from '@/lib/api';
 import { useAuth } from '../auth/AuthProvider';
 import { formatPrice } from '@/lib/format';
 import { Spinner } from '../icons';
+import { AccountRequired } from '../auth/AccountRequired';
 
 /**
  * Start an instalment plan from the vehicle page.
@@ -147,7 +148,12 @@ export function PlanStarter({
       </header>
 
       <div className="p-4">
-        {!open ? (
+        {!user ? (
+          <AccountRequired
+            action="start a payment plan"
+            reason="A plan runs over months and needs your documents, so it has to belong to an account."
+          />
+        ) : !open ? (
           <>
             <p className="text-base">
               From{' '}
