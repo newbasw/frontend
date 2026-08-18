@@ -1,4 +1,5 @@
 import { NextResponse } from 'next/server';
+import { apiUrl } from '@/lib/siteUrl';
 
 export const dynamic = 'force-dynamic';
 export const maxDuration = 60;
@@ -28,7 +29,7 @@ export async function GET(request: Request) {
     return NextResponse.json({ error: 'forbidden' }, { status: 401 });
   }
 
-  const api = process.env.NEXT_PUBLIC_API_URL ?? 'http://localhost:4000';
+  const api = apiUrl();
 
   try {
     const res = await fetch(`${api}/api/sync/run`, {

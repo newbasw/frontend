@@ -2,8 +2,9 @@ import type { MetadataRoute } from 'next';
 import { serverApi } from '@/lib/api.server';
 import { getCategoryNav, getContentIndex } from '@/lib/queries';
 import type { VehicleListResponse } from '@shared/types';
+import { siteUrl } from '@/lib/siteUrl';
 
-const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? 'http://localhost:3000';
+const SITE_URL = siteUrl();
 
 export const revalidate = 3600;
 

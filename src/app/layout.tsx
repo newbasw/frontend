@@ -12,6 +12,7 @@ import { ChatWidget } from '@/components/chat/ChatWidget';
 import { getCategoryNav, getReviews } from '@/lib/queries';
 import { serverApi } from '@/lib/api.server';
 import type { AuthUser } from '@shared/types';
+import { siteUrl } from '@/lib/siteUrl';
 
 const titillium = Titillium_Web({
   subsets: ['latin'],
@@ -20,7 +21,7 @@ const titillium = Titillium_Web({
   variable: '--font-titillium',
 });
 
-const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? 'http://localhost:3000';
+const SITE_URL = siteUrl();
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
