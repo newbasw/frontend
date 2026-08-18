@@ -1,0 +1,36 @@
+# Dependencies and build output
+node_modules/
+dist/
+.next/
+out/
+build/
+coverage/
+.turbo/
+
+# Environment — never commit real credentials.
+# .env.example is the template and is intentionally tracked.
+.env
+.env.*
+!.env.example
+
+# Uploaded identity documents. These are passports and bank statements;
+# they must never reach a repository.
+private/
+uploads/
+
+# Local database cluster
+.localdb/
+
+# Test output
+playwright-report/
+test-results/
+blob-report/
+.playwright/
+
+# OS / editor
+.DS_Store
+Thumbs.db
+*.log
+npm-debug.log*
+.vscode/
+.idea/

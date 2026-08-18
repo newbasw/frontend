@@ -1,0 +1,130 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --bw-ink: #1d1d1a;
+    --bw-brand: #1da15e;
+    --bw-link: #0f62fe;
+    --bw-border-subtle: #e0e0e0;
+    --bw-field: #f4f4f4;
+    --bw-header-height: 80px;
+    --bw-usp-height: 32px;
+  }
+
+  @media (max-width: 767px) {
+    :root {
+      --bw-header-height: 56px;
+      --bw-usp-height: 44px;
+    }
+  }
+
+  html {
+    -webkit-text-size-adjust: 100%;
+  }
+
+  body {
+    @apply bg-white text-ink font-sans text-base antialiased;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-semibold;
+  }
+
+  /* Carbon's link colour, used for inline links across the reference site. */
+  a.cds-link {
+    @apply text-link underline underline-offset-2 hover:text-ink;
+  }
+
+  /* Horizontal scrollers (category bar, carousels) keep the native feel but
+     hide the scrollbar, matching the reference. */
+  .no-scrollbar {
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+  }
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--bw-link);
+    outline-offset: 2px;
+  }
+}
+
+@layer components {
+  /* Page container — 1200px content inside a 1217px wrapper (measured). */
+  .page-wrapper {
+    @apply mx-auto w-full max-w-page px-4 md:px-6;
+  }
+
+  /* Buttons. Measured on the reference: 44px tall, 4px radius, 14px label. */
+  .bw-btn-black {
+    @apply inline-flex h-11 items-center justify-center gap-2 rounded-minimal bg-ink px-5
+           text-base font-semibold text-white transition-colors hover:bg-black
+           focus:outline-none focus-visible:ring-2 focus-visible:ring-link;
+  }
+
+  .bw-btn-outline {
+    @apply inline-flex h-11 items-center justify-center gap-2 rounded-minimal border
+           border-grey-400 bg-white px-5 text-base text-ink transition-colors
+           hover:border-ink hover:bg-grey-100;
+  }
+
+  /* "Request offer" — the primary CTA on a vehicle page. */
+  .bw-btn-cta {
+    @apply inline-flex h-11 items-center justify-center gap-2 rounded-minimal bg-cta px-5
+           text-base text-ink transition-opacity hover:opacity-90;
+  }
+
+  /* "Configure now" — the secondary CTA beside it. */
+  .bw-btn-cta-green {
+    @apply inline-flex h-11 items-center justify-center gap-2 rounded-minimal bg-ctaGreen px-5
+           text-base text-white transition-opacity hover:opacity-90;
+  }
+
+  .bw-btn-brand {
+    @apply inline-flex h-11 items-center justify-center rounded-minimal bg-brand px-5
+           text-base font-semibold text-white transition-colors hover:bg-brand-dark;
+  }
+
+  /* Selected-filter chip: light green fill, as on the reference. */
+  .bw-tag {
+    @apply inline-flex items-center gap-2 rounded-minimal bg-brand/15 py-1.5 pl-3 pr-2
+           text-base text-ink;
+  }
+
+  /* Spec pill on the vehicle detail head: solid ink, white 12px semibold. */
+  .bw-spec-pill {
+    @apply inline-flex h-6 items-center rounded-minimal bg-ink px-2 text-xs font-semibold
+           text-white;
+  }
+
+  .bw-input {
+    @apply h-10 w-full border-0 border-b border-grey-600 bg-grey-100 px-3 text-base text-ink
+           placeholder:text-grey-800 focus:border-link focus:outline-none;
+  }
+
+  .bw-label {
+    @apply mb-1 block text-xs text-grey-800;
+  }
+
+  .bw-field-error {
+    @apply mt-1 block text-xs text-[#da1e28];
+  }
+
+  /* Long-form CMS copy. */
+  .prose-bw {
+    @apply text-base leading-6 text-ink;
+  }
+  .prose-bw a {
+    @apply text-link underline underline-offset-2;
+  }
+  .prose-bw ul {
+    @apply my-3 list-disc space-y-1 pl-5;
+  }
+  .prose-bw table {
+    @apply my-4 w-full border-collapse;
+  }
+}
