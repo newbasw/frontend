@@ -18,12 +18,28 @@ export interface PaymentRequest {
   reference: string;
   status: 'requested' | 'details_sent' | 'reported_paid' | 'confirmed' | 'cancelled';
   method: string;
+  /** The method we can actually take, if we offered a different one. */
+  offered_method?: string | null;
   amount_cents: number;
   kind: string;
   payment_details: string | null;
   admin_note: string | null;
   vehicle_title?: string | null;
 }
+
+const METHOD_LABEL: Record<string, string> = {
+  bank_transfer: 'bank transfer',
+  zelle: 'Zelle',
+  chime: 'Chime',
+  cash_app: 'Cash App',
+  wise: 'Wise',
+  revolut: 'Revolut',
+  crypto_usdt: 'USDT (Tether)',
+  crypto_btc: 'Bitcoin',
+  crypto_eth: 'Ethereum',
+  other: 'another method',
+};
+const methodLabel = (m: string) => METHOD_LABEL[m] ?? m.replace(/_/g, ' ');
 
 const COPY: Record<PaymentRequest['status'], { title: string; body: string }> = {
   requested: {
@@ -170,10 +186,18 @@ export function PaymentStatus({
           </div>
         )}
 
+        {/* If we offered a different method than the buyer chose, say so plainly. */}
+        {request.offered_method && request.offered_method !== request.method && (
+          <div className="rounded-minimal border border-cta bg-cta/10 p-3 text-base">
+            We can&rsquo;t take {methodLabel(request.method)} for this one — please pay by{' '}
+            <strong>{methodLabel(request.offered_method)}</strong> using the details below.
+          </div>
+        )}
+
         {request.payment_details && (
           <div className="rounded-minimal border border-brand bg-brand/5 p-3">
             <p className="mb-1 text-xs font-semibold uppercase tracking-wide text-brand-dark">
-              Where to send it
+              Pay by {methodLabel(request.offered_method || request.method)}
             </p>
             <pre className="whitespace-pre-wrap font-sans text-base">{request.payment_details}</pre>
             {request.admin_note && (
@@ -181,6 +205,16 @@ export function PaymentStatus({
                 {request.admin_note}
               </p>
             )}
+          </div>
+        )}
+
+        {/* A message from us even before any account details are sent. */}
+        {!request.payment_details && request.admin_note && (
+          <div className="rounded-minimal border border-grey-300 bg-grey-100 p-3 text-base">
+            <p className="mb-1 text-xs font-semibold uppercase tracking-wide text-grey-800">
+              Message from BAS World
+            </p>
+            {request.admin_note}
           </div>
         )}
 
