@@ -12,6 +12,7 @@ import { TrustpilotSummary } from '@/components/ui/Trustpilot';
 import { AuctionPanel } from '@/components/auction/AuctionPanel';
 import { PaymentPanel } from '@/components/payment/PaymentPanel';
 import { PlanStarter } from '@/components/plan/PlanStarter';
+import { RentPanel } from '@/components/rent/RentPanel';
 import { VehicleCard } from '@/components/vehicle/VehicleCard';
 import { BadgeCheck, Building, CirclePhone } from '@/components/icons';
 import { getRelatedVehicles, getReviews, getVehicle } from '@/lib/queries';
@@ -299,6 +300,11 @@ export default async function VehiclePage({ params }: Params) {
                 )}
               </div>
             )}
+
+            {/* Rent — a prominent third option, shown first among the ways to take the vehicle. */}
+            <div className="mt-4">
+              <RentPanel vehicleId={vehicle.id} priceCents={vehicle.price_cents} />
+            </div>
 
             {/* Buy outright. Paid by transfer/Zelle/crypto — never by card. */}
             <div className="mt-4">
