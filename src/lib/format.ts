@@ -12,6 +12,20 @@ export function formatPrice(cents: number | null | undefined): string | null {
   return `€ ${NUMBER.format(Math.round(cents / 100))}`;
 }
 
+/**
+ * Indicative daily rental price for listing cards and teasers.
+ *
+ * Mirrors the server default (platform_settings.rental_daily_rate_pct); the
+ * authoritative figure is always the server quote on the vehicle page. If the
+ * owner changes the real rate, update this constant to match.
+ */
+export const RENT_DAILY_RATE_PCT = 0.4;
+
+export function rentFromPerDay(priceCents: number | null | undefined): string | null {
+  if (priceCents == null || priceCents <= 0) return null;
+  return formatPrice(Math.round((priceCents * RENT_DAILY_RATE_PCT) / 100));
+}
+
 export function formatMileage(km: number | null | undefined): string | null {
   if (km == null) return null;
   return `${NUMBER.format(km)} km`;

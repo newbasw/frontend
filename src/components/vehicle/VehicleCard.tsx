@@ -3,7 +3,7 @@ import Link from 'next/link';
 import { BadgeCheck, Building } from '../icons';
 import { BasWorldMark } from '../ui/BasWorldMark';
 import { FavoriteButton } from './FavoriteButton';
-import { cardSpecs, formatPrice } from '@/lib/format';
+import { cardSpecs, formatPrice, rentFromPerDay } from '@/lib/format';
 import type { VehicleSummary } from '@shared/types';
 
 interface Props {
@@ -118,18 +118,42 @@ export function VehicleCard({ vehicle, view = 'grid', priority = false }: Props)
           )}
         </div>
 
-        {/* Centred price block. */}
-        <div className="mt-4 border-t border-grey-300 pt-3 text-center">
-          <p className="flex items-center justify-center gap-2 text-base text-grey-800">
-            Buy
-            {priceBefore && <span className="font-semibold text-ink line-through">{priceBefore}</span>}
-          </p>
-          <p
-            className={`text-2xl font-semibold leading-8 ${priceBefore ? 'text-brand' : 'text-ink'}`}
-          >
-            {price ?? 'Price on request'}
-          </p>
-        </div>
+        {/*
+          Buy and Rent side by side, so a browser sees rent exists before ever
+          opening the vehicle. The whole card links to the detail page, where
+          Rent is the first option; these are clear labels, not separate links
+          (a link inside a link is invalid), and tapping either opens the page.
+        */}
+        {(() => {
+          const rentFrom = rentFromPerDay(vehicle.price_cents);
+          return (
+            <div className="mt-4 grid grid-cols-2 divide-x divide-grey-300 border-t border-grey-300 pt-3 text-center">
+              <div className="px-1">
+                <p className="flex items-center justify-center gap-2 text-base text-grey-800">
+                  Buy
+                  {priceBefore && <span className="font-semibold text-ink line-through">{priceBefore}</span>}
+                </p>
+                <p className={`text-2xl font-semibold leading-8 ${priceBefore ? 'text-brand' : 'text-ink'}`}>
+                  {price ?? 'Price on request'}
+                </p>
+              </div>
+              <div className="px-1">
+                <p className="flex items-center justify-center gap-1 text-base text-grey-800">
+                  Rent
+                  <span className="rounded-full bg-brand px-1.5 py-0.5 text-[10px] font-semibold uppercase leading-none text-white">New</span>
+                </p>
+                {rentFrom ? (
+                  <p className="text-2xl font-semibold leading-8 text-ink">
+                    {rentFrom}
+                    <span className="text-sm font-normal text-grey-800">/day</span>
+                  </p>
+                ) : (
+                  <p className="text-base leading-8 text-grey-800">Enquire</p>
+                )}
+              </div>
+            </div>
+          );
+        })()}
       </div>
     </Link>
   );

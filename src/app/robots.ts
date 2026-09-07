@@ -9,7 +9,7 @@ export default function robots(): MetadataRoute.Robots {
       {
         userAgent: '*',
         allow: '/',
-        // Mirrors the reference site's robots.txt: authenticated and
+        // Mirrors the reference site's robots.txt: authenticated a
         // parameterised routes are kept out of the index.
         disallow: ['/login', '/register', '/favorites', '/account', '/admin', '/api/', '/forgot-password'],
       },
