@@ -109,6 +109,8 @@ export interface VehicleSummary {
   price_cents: number | null;
   price_before_cents: number | null;
   auction_price_cents: number | null;
+  /** Indicative daily rental rate, from the admin-controlled percentage. */
+  rent_daily_cents?: number | null;
   transmission: string | null;
   emission_norm: string | null;
   power_type: string | null;

@@ -125,7 +125,11 @@ export function VehicleCard({ vehicle, view = 'grid', priority = false }: Props)
           (a link inside a link is invalid), and tapping either opens the page.
         */}
         {(() => {
-          const rentFrom = rentFromPerDay(vehicle.price_cents);
+          // Prefer the server-computed rate (admin-controlled); fall back to the
+          // shared constant only if the API predates the field.
+          const rentFrom = vehicle.rent_daily_cents != null
+            ? formatPrice(vehicle.rent_daily_cents)
+            : rentFromPerDay(vehicle.price_cents);
           return (
             <div className="mt-4 grid grid-cols-2 divide-x divide-grey-300 border-t border-grey-300 pt-3 text-center">
               <div className="px-1">
