@@ -54,8 +54,13 @@ export function UspBar({ reviewCount, reviewAverage }: Props) {
         <div className="hidden shrink-0 items-center gap-4 md:flex">
           <div className="flex items-center gap-2">
             <CirclePhone size={14} />
-            <a href="tel:+31413728320" className="text-xs hover:underline">
-              +31 413 72 8320
+            <a
+              href="https://wa.me/18325714961"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-xs hover:underline"
+            >
+              WhatsApp +1 832 571 4961
             </a>
           </div>
           <button type="button" className="flex items-center gap-1 text-xs">

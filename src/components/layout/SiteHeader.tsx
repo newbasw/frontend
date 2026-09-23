@@ -105,7 +105,12 @@ export function SiteHeader({ categories }: Props) {
         <SearchBar className="min-w-0 flex-1" variant="pill" placeholder="Search for vehicles or enter the Ref no." />
 
         <div className="flex shrink-0 items-center gap-3">
-          <a href="tel:+31413728320" aria-label="Call BAS World">
+          <a
+            href="https://wa.me/18325714961"
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="Message BAS World on WhatsApp"
+          >
             <CirclePhone size={22} />
           </a>
           <Link href={user ? '/account' : '/login'} aria-label={user ? 'Account' : 'Login'}>
