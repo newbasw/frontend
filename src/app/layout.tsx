@@ -104,9 +104,8 @@ export default async function RootLayout({ children }: { children: React.ReactNo
                   : undefined,
               contactPoint: {
                 '@type': 'ContactPoint',
-                telephone: '+31 413 72 83 20',
+                telephone: '+1 832 571 4961',
                 contactType: 'customer service',
-                areaServed: 'NL',
               },
               sameAs: [
                 'https://www.facebook.com/BASWorldplatform',
