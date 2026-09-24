@@ -291,11 +291,16 @@ export default async function VehiclePage({ params }: Params) {
                 )}
                 {vehicle.seller_full.phone && (
                   <a
-                    href={`tel:${vehicle.seller_full.phone.replace(/\s/g, '')}`}
+                    href={
+                      isPartner
+                        ? `tel:${vehicle.seller_full.phone.replace(/\s/g, '')}`
+                        : 'https://wa.me/18325714961'
+                    }
+                    {...(isPartner ? {} : { target: '_blank', rel: 'noopener noreferrer' })}
                     className="mt-3 flex items-center gap-2 text-md font-semibold hover:underline"
                   >
                     <CirclePhone size={16} className="text-brand" />
-                    {vehicle.seller_full.phone}
+                    {isPartner ? vehicle.seller_full.phone : `WhatsApp ${vehicle.seller_full.phone}`}
                   </a>
                 )}
               </div>
